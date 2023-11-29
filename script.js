@@ -1,3 +1,18 @@
-chrome.storage.sync.get('overlayColor', function(result) {
-    var get = result.overlayColor;
+document.addEventListener("DOMContentLoaded", function() {
+
+    document.getElementById('close').addEventListener("click", (e) => {
+        closePopup();
+    });
+
+    document.getElementById('add').addEventListener("click", (e) => {
+        openPopup();
+    });
 });
+
+function openPopup() {
+    document.getElementById('popup').style.display = 'block';
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}

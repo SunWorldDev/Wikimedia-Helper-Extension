@@ -39,3 +39,90 @@ body {
 h2 {
     margin: 0;
 }
+
+#popup {
+    position: absolute;
+    width: 300px;
+    height: 229px;
+    background-color: #16558F;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    display: none;
+}
+
+#close {
+    float: right;
+    font-size: 16px;
+    color: rgb(238, 0, 0);
+    font-weight: bolder;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.label {
+    float: left;
+    font-size: 16px;
+    color: whitesmoke;
+    margin: 5px 10px;
+}
+
+.eingabe {
+    width: 160px;
+    float: right;
+    margin: 5px 10px;
+    resize: none;
+}
+
+#addBtn {
+    padding: 8px;
+    border-radius: 10px;
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    background-color: rgb(38, 176, 38);
+    border: 2px rgba(75, 100, 75, 0.543) solid;
+    color: white;
+    outline: none;
+    box-shadow: none;
+    border-radius: 20px;
+    height: 40px;
+    width: 100px;
+}
+
+#addButton:hover {
+    background-color: rgb(31, 31, 31);
+}
+
+#close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    height: 40px;
+    width: 100px;
+    border: none;
+    background: #FF342B;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 2px rgba(189, 4, 4, 0.249) solid;
+}
+
+.btnLable {
+    line-height: 20px;
+    font-size: 13px;
+    color: #fff;
+    font-family: sans-serif;
+    letter-spacing: 1px;
+}
+
+#close:hover {
+    background: #e52e26;
+}
+
+#close:hover .svg-icon {
+    animation: slope 1s linear infinite;
+}
