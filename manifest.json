@@ -2,12 +2,11 @@
     "manifest_version": 3,
     "name": "Wikimedia Helper",
     "version": "1.0.0",
-    "default_locale": "en",
     "description": "Your little Helper to get fast various wiki code templates for your wiki page!",
     "author": "Philipp :)",
     "permissions": [
         "storage"
-      ],
+    ],
     "action": {
         "default_popup": "index.html",
         "default_title": "Wikimedia Helper"
