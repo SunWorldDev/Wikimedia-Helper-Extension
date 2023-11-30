@@ -27,9 +27,9 @@ function closePopup() {
     loadData();
 }
 
-function addFrame() {
+async function addFrame() {
 
-    saveData()
+    console.log(await saveData());
 
     nextSaveSlot++;
 
@@ -40,24 +40,45 @@ async function saveData() {
     let title = document.getElementById('title').value;
     let code = document.getElementById('code').value;
 
-    let data = await getData();
-
-    Object.defineProperty(data, title, {
-        value: code
+    fetchData().then((data) => {
+        daten = data;
     });
 
-    chrome.storage.sync.set({ data: data });
+    // Ensure daten is an object or create an empty object if needed
+    if (typeof daten !== 'object' || daten === null) {
+        daten = {};
+    }
+
+    daten[title] = code;
+
+    chrome.storage.sync.set({ data: JSON.stringify(daten) }, function() {
+        console.log('Data saved successfully');
+    });
 }
 
-function getData() {
-    chrome.storage.sync.get(['data'], function(result) {
-        if (result.data) {
-            return result.data;
+
+
+async function fetchData() {
+    try {
+        const result = await chrome.storage.sync.get(['data']);
+        if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError);
+            return;
         }
-    });
-    return {};
+
+        // Check if 'data' exists in the result
+        if ('data' in result) {
+            console.log(JSON.parse(result.data));
+            return JSON.parse(result.data);
+        } else {
+            console.log('No data found');
+            return null; // Or another default value
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null; // Or handle the error accordingly
+    }
 }
 
-function loadData() {
-    console.log(getData());
-}
+
+function loadData() {}
