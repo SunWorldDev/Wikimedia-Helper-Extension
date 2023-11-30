@@ -1,5 +1,3 @@
-let nextSaveSlot = 0;
-
 document.addEventListener("DOMContentLoaded", function() {
 
     loadData();
@@ -29,33 +27,32 @@ function closePopup() {
 
 async function addFrame() {
 
-    console.log(await saveData());
-
-    nextSaveSlot++;
+    await saveData();
 
     closePopup();
 }
 
 async function saveData() {
-    let title = document.getElementById('title').value;
-    let code = document.getElementById('code').value;
+    try {
+        let title = document.getElementById('title').value;
+        let code = document.getElementById('code').value;
 
-    fetchData().then((data) => {
-        daten = data;
-    });
+        let data = await fetchData();
 
-    // Ensure daten is an object or create an empty object if needed
-    if (typeof daten !== 'object' || daten === null) {
-        daten = {};
+        // Ensure data is an object or create an empty object if needed
+        if (typeof data !== 'object' || data === null) {
+            data = {};
+        }
+
+        data[title] = code;
+
+        chrome.storage.sync.set({ data: JSON.stringify(data) }, function() {
+            console.log('Data saved successfully');
+        });
+    } catch (error) {
+        console.error('Error saving data:', error);
     }
-
-    daten[title] = code;
-
-    chrome.storage.sync.set({ data: JSON.stringify(daten) }, function() {
-        console.log('Data saved successfully');
-    });
 }
-
 
 
 async function fetchData() {
@@ -68,7 +65,6 @@ async function fetchData() {
 
         // Check if 'data' exists in the result
         if ('data' in result) {
-            console.log(JSON.parse(result.data));
             return JSON.parse(result.data);
         } else {
             console.log('No data found');
@@ -81,4 +77,19 @@ async function fetchData() {
 }
 
 
-function loadData() {}
+async function loadData() {
+    const parent = document.getElementById("templates");
+    parent.innerHTML = "";
+    try {
+        let data = await fetchData();
+
+        for (const key in data) {
+            let frame = document.createElement("div");
+            frame.setAttribute("class", "frame");
+            frame.innerHTML = "<h2 data-code='" + data[key] + "'>" + key + "</h2>"
+            parent.appendChild(frame);
+        }
+    } catch (error) {
+        console.error('Fehler beim Laden der Daten:', error);
+    }
+}
