@@ -33,6 +33,10 @@ body {
 }
 
 .frame:hover {
+    background-color: rgba(30, 30, 30, 0.031);
+}
+
+.frame:active {
     background-color: rgba(255, 255, 255, 0.031);
 }
 

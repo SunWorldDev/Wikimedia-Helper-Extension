@@ -99,6 +99,23 @@ async function loadData() {
             frame.addEventListener("click", (e) => {
                 navigator.clipboard.writeText(e.currentTarget.getAttribute("data-code"));
             });
+            frame.addEventListener("contextmenu", async function(e) {
+                e.preventDefault();
+
+                let cTarget = e.currentTarget;
+
+                const userConfirmation = window.confirm("Do you want to delete " + cTarget.children[0].innerHTML + "?");
+
+                if (userConfirmation) {
+                    let data = await fetchData();
+                    delete data[cTarget.children[0].innerHTML];
+                    console.log(cTarget.children[0].innerHTML);
+                    await chrome.storage.sync.set({ data: data }, function() {
+                        console.log('deleted');
+                    });
+                    loadData();
+                }
+            });
             parent.appendChild(frame);
         }
     } catch (error) {
