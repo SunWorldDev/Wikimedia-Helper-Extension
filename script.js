@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("addBtn").addEventListener("click", (e) => {
         addFrame();
     });
-
 });
 
 function openPopup() {
@@ -26,6 +25,15 @@ function closePopup() {
 }
 
 async function addFrame() {
+
+    if (document.getElementById('title').value == "") {
+        alert("Please enter a title!");
+        return;
+    }
+    if (document.getElementById('code').value == "") {
+        alert("Please enter a wiki code snippet!");
+        return;
+    }
 
     await saveData();
 
@@ -86,7 +94,11 @@ async function loadData() {
         for (const key in data) {
             let frame = document.createElement("div");
             frame.setAttribute("class", "frame");
-            frame.innerHTML = "<h2 data-code='" + data[key] + "'>" + key + "</h2>"
+            frame.setAttribute("data-code", data[key]);
+            frame.innerHTML = "<h2>" + key + "</h2>"
+            frame.addEventListener("click", (e) => {
+                navigator.clipboard.writeText(e.currentTarget.getAttribute("data-code"));
+            });
             parent.appendChild(frame);
         }
     } catch (error) {
