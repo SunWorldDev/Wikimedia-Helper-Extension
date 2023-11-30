@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    loadData();
+    loadData(); // Call loadData if not already loaded
+
 
     document.getElementById('close').addEventListener("click", (e) => {
         closePopup();
@@ -54,40 +55,30 @@ async function saveData() {
 
         data[title] = code;
 
-        chrome.storage.sync.set({ data: JSON.stringify(data) }, function() {
+        // Check if 'data' is already a string
+        if (typeof data !== 'string') {
+            data = JSON.stringify(data); // Stringify the data if it's not a string
+        }
+
+        await chrome.storage.sync.set({ data: data }, function() {
             console.log('Data saved successfully');
         });
+
+        // Introduce a small delay before calling loadData
+        setTimeout(() => {
+            loadData();
+        }, 100); // You can adjust the delay time if needed
+
     } catch (error) {
         console.error('Error saving data:', error);
     }
 }
 
 
-async function fetchData() {
-    try {
-        const result = await chrome.storage.sync.get(['data']);
-        if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
-            return;
-        }
-
-        // Check if 'data' exists in the result
-        if ('data' in result) {
-            return JSON.parse(result.data);
-        } else {
-            console.log('No data found');
-            return null; // Or another default value
-        }
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return null; // Or handle the error accordingly
-    }
-}
-
 
 async function loadData() {
     const parent = document.getElementById("templates");
-    parent.innerHTML = "";
+    parent.innerHTML = ""; // Clear the parent element before appending frames
     try {
         let data = await fetchData();
 
@@ -110,15 +101,50 @@ async function loadData() {
                     let data = await fetchData();
                     delete data[cTarget.children[0].innerHTML];
                     console.log(cTarget.children[0].innerHTML);
-                    await chrome.storage.sync.set({ data: data }, function() {
+
+                    await chrome.storage.sync.set({ data: JSON.stringify(data) }, function() {
                         console.log('deleted');
+                        loadData(); // Move the loadData call here
                     });
-                    loadData();
                 }
             });
             parent.appendChild(frame);
         }
     } catch (error) {
         console.error('Fehler beim Laden der Daten:', error);
+    }
+}
+
+
+
+
+async function fetchData() {
+    try {
+        const result = await chrome.storage.sync.get(['data']);
+        if (chrome.runtime.lastError) {
+            console.error('Error getting data from storage:', chrome.runtime.lastError);
+            return null;
+        }
+
+        // Log the result for debugging
+        console.log('Storage result:', result);
+
+        // Check if 'data' exists in the result
+        if ('data' in result && typeof result.data !== 'undefined') {
+            if (typeof result.data === 'string') {
+                const parsedData = JSON.parse(result.data);
+                console.log('Parsed data:', parsedData);
+                return parsedData || {}; // Return an empty object if parsedData is falsy
+            } else {
+                console.log('Data is not a string:', result.data);
+                return null; // Or handle this case accordingly
+            }
+        } else {
+            console.log('No valid data found');
+            return {}; // Return an empty object as a default value
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error; // Rethrow the error for further inspection
     }
 }
