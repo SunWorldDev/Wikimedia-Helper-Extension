@@ -34,6 +34,13 @@ Follow these simple steps to install Wikimedia Helper:
 2. **Deleting Templates:**
    - Easily manage your templates by deleting those that are no longer needed.
 
+## Gallery
+
+![image](https://github.com/SunWorldDev/Wikimedia-Helper-Extension/assets/143061853/e91d2622-98d9-489a-ae1a-b8ba1281b1bc)
+![image](https://github.com/SunWorldDev/Wikimedia-Helper-Extension/assets/143061853/1dad89a9-4610-4509-9158-9066d821757b)
+
+
+
 ## Get Started
 
 Enhance your Wiki editing experience with Wikimedia Helper. Download and install the extension now to simplify the creation and deletion of Wiki syntax code snippets.
