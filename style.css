@@ -130,3 +130,9 @@ h2 {
 #close:hover .svg-icon {
     animation: slope 1s linear infinite;
 }
+
+#templates {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
