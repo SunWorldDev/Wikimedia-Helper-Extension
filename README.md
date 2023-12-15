@@ -1,4 +1,4 @@
-# Wikimedia Helper - Chrome Extension for Quick Wiki Syntax Snippets
+# Wikimedia Helper - Chrome Extension
 
 ## Overview
 
